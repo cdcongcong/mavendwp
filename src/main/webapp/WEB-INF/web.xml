@@ -1,17 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	version="3.1">
-	<display-name>web项目</display-name>
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    version="3.1">
+    <display-name>web项目</display-name>
 
+
+    <!-- <context-param>元素含有一对参数名和参数值，用作应用的Servlet上下文初始化参数，参数名在整个Web应用中必须是惟一的，在web应用的整个生命周期中上下文初始化参数都存在，任意的Servlet和jsp都可以随时随地访问它。<param-name>子元素包含有参数名，而<param-value>子元素包含的是参数值。作为选择，可用<description>子元素来描述参数。 -->
     <context-param>
-        <param-name>contextConfigLocation</param-name>
+        <param-name>param-test</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
 
+    <!-- web.xml的加载顺序是: <context-param>-> <listener> -> <filter> -> <servlet>。其中，如果web.xml中出现了相同的元素，则按照在配置文件中出现的先后顺序来加载 -->
+    <!-- <listener>为web应用程序定义监听器，监听器用来监听各种事件，比如：application和session事件，配置Spring，必须需要<listener>，而<context-param>可有可无，如果在web.xml中不写<context-param>配置信息，默认的路径是/WEB-INF/applicationContext.xml，在WEB-INF目录下创建的xml文件的名称必须是applicationContext.xml。如果是要自定义文件名可以在web.xml里加入contextConfigLocation这个context参数：在<param-value>里指定相应的xml文件名，如果有多个xml文件，可以写在一起并以“,”号分隔。为Web应用配置Listener的两种方式：l使用@WebListener修饰Listener实现类即可。2 
+        在web.xml文档中使用<listener>进行配置。 -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <!-- 用于设置容器的session参数，比如：<session-timeout>用于指定http session的失效时间。默认时间设置在<jakarta>/conf/web.xml 
+        (30 minutes)。<session-timeout>用来指定默认的会话超时时间间隔，以分钟为单位。该元素值必须为整数。如果 session-timeout元素的值为零或负数，则表示会话将永远不会超时。 -->
+    <session-config>
+        <session-timeout>120</session-timeout>
+    </session-config>
+
+    <!-- Filter可认为是Servle的一种“加强版”，主要用于对用户请求request进行预处理，也可以对Response进行后处理，是个典型的处理链。使用Filter的完整流程是：Filter对用户请求进行预处理，接着将请求HttpServletRequest交给Servlet进行处理并生成响应，最后Filter再对服务器响应HttpServletResponse进行后处理。Filter与Servlet具有完全相同的生命周期，且Filter也可以通过<init-param>来配置初始化参数，获取Filter的初始化参数则使用FilterConfig的getInitParameter()。 -->
+
+    <!-- 字符集过滤器 CharacterEncodingFilter类可以通过简单配置来帮我们实现字符集转换的功能，参数encoding用于指定编码类型，参数forceEncoding设为true时，强制执行request.setCharacterEncoding(this.encoding)和reponse.setCharacterEncoding(this.encoding)中的方法。 -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/**</url-pattern>
+    </filter-mapping>
+
+    <!-- Servlet通常称为服务器端小程序，是运行在服务器端的程序，用于处理及响应客户的请求。 -->
+    <!-- 创建Servlet实例有两个时机：1客户端第一次请求某个Servlet时，系统创建该Servlet的实例，大部分Servlet都是这种Servlet。2 
+        Web应用启动时立即创建Servlet实例，即load-on-start Servlet。 -->
+    <!-- 从Servlet3.0开始，配置Servlet有两种方式： 1 在Servlet类中使用@WebServlet Annotation进行配置。2 
+        在web.xml文件中进行配置。 -->
+    <!-- 配置Spring MVC，指定处理请求的Servlet，有两种方式：l 默认查找MVC配置文件的地址是：/WEB-INF/${servletName}-servlet.xml 
+        2 可以通过配置修改MVC配置文件的位置，需要在配置DispatcherServlet时指定MVC配置文件的位置。 -->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+
+    <!-- welcome page -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+
 
 </web-app>
