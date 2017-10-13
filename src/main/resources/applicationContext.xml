@@ -28,8 +28,6 @@
         destroy-method="close"
         p:driverClassName="${datasource.driverClassName}"
         p:url="${datasource.url}"
-        p:username="${datasource.username}"
-        p:password="${datasource.password}"
         p:validationQuery="${datasource.validationQuery}"
     />
 
