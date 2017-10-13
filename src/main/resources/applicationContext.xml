@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans  
-http://www.springframework.org/schema/beans/spring-beans.xsd 
-http://www.springframework.org/schema/context  
-http://www.springframework.org/schema/context/spring-context.xsd  
-http://www.springframework.org/schema/tx 
-http://www.springframework.org/schema/tx/spring-tx.xsd
-http://www.springframework.org/schema/aop 
-http://www.springframework.org/schema/aop/spring-aop.xsd
-">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd  
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+    ">
 
-	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
-		destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:XE" />
-		<property name="username" value="mybatis" />
-		<property name="password" value="mybatis" />
-	</bean>
+    <!-- 将多个配置文件读取到容器中，交给Spring管理 -->  
+    <!-- 等同，多个配置文件用逗号分隔 <context:property-placeholder location="classpath:jdbc.properties"/>  -->
+    <!-- 另 <util:properties id="configProperties" location="classpath*:/system.properties"/> -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+           <list>  
+              <!-- 这里支持多种寻址方式：classpath和file -->  
+              <value>classpath:db.properties</value>  
+            </list>  
+        </property>  
+    </bean>  
+
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+        destroy-method="close"
+        p:driverClassName="${datasource.driverClassName}"
+        p:url="${datasource.url}"
+        p:username="${datasource.username}"
+        p:password="${datasource.password}"
+        p:validationQuery="${datasource.validationQuery}"
+    />
 
 </beans>
