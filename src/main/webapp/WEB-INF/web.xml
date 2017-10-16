@@ -8,7 +8,7 @@
 
     <!-- <context-param>元素含有一对参数名和参数值，用作应用的Servlet上下文初始化参数，参数名在整个Web应用中必须是惟一的，在web应用的整个生命周期中上下文初始化参数都存在，任意的Servlet和jsp都可以随时随地访问它。<param-name>子元素包含有参数名，而<param-value>子元素包含的是参数值。作为选择，可用<description>子元素来描述参数。 -->
     <context-param>
-        <param-name>param-test</param-name>
+        <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
 
@@ -50,11 +50,48 @@
         Web应用启动时立即创建Servlet实例，即load-on-start Servlet。 -->
     <!-- 从Servlet3.0开始，配置Servlet有两种方式： 1 在Servlet类中使用@WebServlet Annotation进行配置。2 
         在web.xml文件中进行配置。 -->
+        
+    <!--如果你的DispatcherServlet拦截"/"，为了实现REST风格，拦截了所有的请求，那么同时对*.js,*.jpg等静态文件的访问也就被拦截了。-->  
+    <!--方案一：激活Tomcat的defaultServlet来处理静态文件-->  
+    <!--要写在DispatcherServlet的前面， 让 defaultServlet先拦截请求，这样请求就不会进入Spring了，我想性能是最好的吧。-->  
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.js</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.css</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.gif</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.jpg</url-pattern>
+  </servlet-mapping>
+        
+        
+        
+        
+        
     <!-- 配置Spring MVC，指定处理请求的Servlet，有两种方式：l 默认查找MVC配置文件的地址是：/WEB-INF/${servletName}-servlet.xml 
         2 可以通过配置修改MVC配置文件的位置，需要在配置DispatcherServlet时指定MVC配置文件的位置。 -->
     <servlet>
         <servlet-name>springmvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>  
+            <param-name>contextConfigLocation</param-name>  
+            <param-value>classpath:springmvc-servlet.xml</param-value>  
+        </init-param>  
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

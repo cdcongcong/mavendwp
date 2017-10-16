@@ -36,7 +36,7 @@ public class UserController {
 		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM DUAL";
+		String sql = "SELECT 1";
 		log.debug(sql);
 		String result = null;
 
