@@ -80,9 +80,6 @@
   </servlet-mapping>
         
         
-        
-        
-        
     <!-- 配置Spring MVC，指定处理请求的Servlet，有两种方式：l 默认查找MVC配置文件的地址是：/WEB-INF/${servletName}-servlet.xml 
         2 可以通过配置修改MVC配置文件的位置，需要在配置DispatcherServlet时指定MVC配置文件的位置。 -->
     <servlet>
