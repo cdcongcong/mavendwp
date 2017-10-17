@@ -12,6 +12,7 @@
         <spring.version>5.0.0.RELEASE</spring.version>
         <jackson.version>2.9.2</jackson.version>
         <sqlite.version>3.20.1</sqlite.version>
+        <log4j.version>2.9.1</log4j.version>
     </properties>
 
     <dependencies>
@@ -22,6 +23,17 @@
             <scope>test</scope>
         </dependency>
 
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -50,26 +62,17 @@
             <version>${sqlite.version}</version>
         </dependency>
 
-
+        <!-- 代码中的JCL日志桥接到SLF4J 已依赖slf4j-api-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.22</version>
+            <version>1.7.25</version>
         </dependency>
+        <!-- LOG4J对SLF4J日志接口实现的绑定器 已依赖log4j-core-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-jcl</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.7</version>
+            <version>${log4j.version}</version>
         </dependency>
 
 
